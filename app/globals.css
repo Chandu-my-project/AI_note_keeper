@@ -1,26 +1,349 @@
-@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+body {
+  /* Your original dark grey */
+  background-color: #212529; 
+  background-image: url("https://www.transparenttextures.com/patterns/food.png");
+  background-blend-mode: soft-light; 
+  margin: 0;
+  padding: 0 16px;
+  min-height: 100vh;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+
+header {
+  background-color: #f5ba13;
+  margin: auto -16px;
+  padding: 16px 32px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+  color: #fff;
+  font-family: "McLaren", cursive;
+  font-weight: 200;
+  margin: 0 15px;
+}
+HighlightIcon
+{
+  margin: 0 15px;
+}
+
+footer {
+position: relative; 
+  text-align: center;
+  width: 100%;
+  height: 2.5rem;
+  padding: 20px 0; 
+  margin-top: 50px; 
+  margin-bottom: 50px;
+  clear: both; 
+}
+footer p {
+  color: white; 
+  font-size: 0.9rem;
+  margin-top: 20px;
+  font-weight: bold;
+}
+.note {
+background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 5px #ccc;
+  padding: 10px;
+  width: 240px; 
+  min-height: 100px; 
+  margin: 16px;
+  display: flex; 
+  flex-direction: column;
+  float: left;
+}
+.note h1 {
+  font-size: 1.1em;
+  margin-bottom: 6px;
+}
+
+  .note p {
+  font-size: 1.1em;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-height: 500px; /* Optional: if you want to cap it */
+  overflow-y: auto; /* Adds a scrollbar only if it exceeds 500px */
+}
+
+
+.note button {
+  position: relative;
+  float: right;
+  margin-right: 10px;
+  color: #f5ba13;
+  border: none;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  outline: none;
+}
+/* The container for note buttons */
+.note-actions {
+  display: flex;
+  justify-content: flex-end; /* Aligns buttons to the right */
+  gap: 10px;               /* Adds space between edit and delete */
+  margin-top: auto;        /* Pushes the buttons to the bottom of the note */
+  padding-top: 10px;
+}
+
+/* Ensure buttons inside this container don't float */
+.note-actions button {
+  float: none;           /* Removes the float inherited from previous styles */
+  margin-right: 0;       /* Removes the margin-right */
+  display: flex;         /* Centers the icon inside the button */
+  align-items: center;
+  justify-content: center;
+}
+form.create-note {
+  position: relative;
+  width: 480px;
+  margin: 30px auto 20px auto;
+  background: #fff;
+  padding: 15px;
+  border-radius: 7px;
+  box-shadow: 0 1px 5px rgb(138, 137, 137);
+}
+form.create-note input,
+form.create-note textarea {
+  width: 100%;
+  border: none;
+  padding: 4px;
+  outline: none;
+  font-size: 1.2em;
+  font-family: inherit;
+  resize: none;
+}
+
+form.create-note button {
+
+  background: #f5ba13;
+ color: white;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  outline: none;
+}
+.editOptions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.editOptions button {
+  background-color: #f5ba13 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 5px !important;
+  padding: 8px 16px !important;
+  width: auto !important;
+  height: auto !important;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Added subtle shadow */
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.editOptions button:hover {
+  background-color: #d19e0d !important; /* Slightly darker yellow on hover */
+  transform: translateY(-1px);
+}
+
+
+.ai-btn {
+  padding: 8px 12px !important; /* Adjust padding for icon aspect ratio */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.error-message {
+position: fixed;
+  /* bottom: 20px;  */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(245, 186, 19, 0.9); 
+  color: #212529; 
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: bold;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 2000; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: medium;
+  text-align: center;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.create-area
+{
+  min-height: 45vh;
+}
+
+.search-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  margin: 0 20px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white */
+  width: 100%;
+  max-width: 600px;
+  padding: 8px 15px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-box:focus-within {
+  background-color: #fff; /* Turns solid white on focus */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.search-icon {
+  color: #fff;
+  margin-right: 10px;
+}
+
+
+.search-box:focus-within .search-icon {
+  color: #555;
+}
+
+.search-input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1rem;
+  color: #fff;
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.search-input:focus {
+  color: #212529; 
+}
+
+
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 10px;
+  padding: 10px 16px;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.search-container {
+  margin: 0;
+  max-width: 600px; 
+  flex-shrink: 1;
+}
+
+.search-box {
+  padding: 6px 10px;
+}
+
+
+form.create-note {
+  width: 95%; /* Use percentage instead of 480px */
+  max-width: 480px; /* Caps width on desktop */
+  margin: 35px auto;
+}
+.create-note {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-note div {
+  display: flex;
+  align-items: center;
+}
+
+
+.notes-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* This centers the notes */
+  align-items: flex-start; /* This is key! It prevents notes from stretching to match the tallest one */
+  gap: 20px;
+  padding: 20px;
+}
+
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px; 
+}
+
+
+@media (min-width: 768px) {
+  header {
+    padding: 16px 32px;
+  }
+  
+  header h1 {
+    font-size: 2rem;
+  }
+  
+  .search-container {
+    max-width: 500px; 
+  }
+
+  .note {
+    max-width: 240px; 
+   
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+
+@media (max-width: 480px) {
+  .error-message {
+    width: 85%;
+    font-size: 0.85rem;
+    padding: 10px 16px;
+  }
 }
