@@ -13,7 +13,7 @@ export default function App() {
   const [editMode, setEditMode] = useState(false);
   const [editObject, setEditObject] = useState({ id: 0, title: "", content: "" });
 
-  // 1. Calculate these directly during render (no state, no effects!)
+
   const filteredNotes = searchTerm.trim() 
     ? notes.filter((note) => {
         const search = searchTerm.toLowerCase();
@@ -24,10 +24,9 @@ export default function App() {
 
   const isSearchMode = searchTerm.trim().length > 0;
   
-  // Logic: Show message if we are searching AND results are empty
+
   const showEmptyMessage = isSearchMode && filteredNotes.length === 0;
 
-  // Handlers (kept exactly the same)
   function addNote(newNote) {
     setNotes((prev) => [...prev, { ...newNote, noteID: Date.now() }]);
   }
@@ -68,7 +67,7 @@ export default function App() {
         })}
       </div>
 
-      {/* 2. Simply check the variable */}
+
       {showEmptyMessage && (
         <div className="error-message">
           <ErrorOutlineIcon style={{ fontSize: "1.25rem", marginRight: "8px", verticalAlign: "middle" }} />

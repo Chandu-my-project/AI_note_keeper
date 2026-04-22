@@ -23,7 +23,7 @@ function CreateArea(props) {
       title: props.editTitle || "",
       content: props.editContent || ""
     });
-  }, [props.editTitle, props.editContent]);
+  }, [props.editId, props.editTitle, props.editContent]);
 
   useEffect(() => {
   if (isEmpty || aiError) {
