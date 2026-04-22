@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from 'react';
 import Header from "../components/Header";
 import Note from "../components/Note";
 import CreateArea from "../components/CreateArea";
@@ -14,7 +14,7 @@ export default function App() {
   const [filteredNotes, setFilteredNotes] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [showEmptyMessage, setShowEmptyMessage] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const isMounted = useRef(false);
   
   const [editObject, setEditObject] = useState({
     id: 0,
@@ -22,23 +22,23 @@ export default function App() {
     content: ""
   });
 
-  // 1. Initial Load from LocalStorage
-  useEffect(() => {
-    const savedNotes = localStorage.getItem("notes");
-    if (savedNotes) {
-      setNotes(JSON.parse(savedNotes));
-    }
-    setIsMounted(true);
-  }, []);
+useEffect(() => {
+  const savedNotes = localStorage.getItem("notes");
+  if (savedNotes) {
+    setNotes(JSON.parse(savedNotes));
+  }
+  isMounted.current = true; 
+}, []);
 
-  // 2. Save to LocalStorage whenever notes change
-  useEffect(() => {
-    if (isMounted) {
-      localStorage.setItem("notes", JSON.stringify(notes));
-    }
-  }, [notes, isMounted]);
 
-  // 3. Search/Filter Logic
+useEffect(() => {
+
+  if (isMounted.current) {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }
+}, [notes]);
+
+
   useEffect(() => {
     if (searchTerm.trim()) {
       setIsSearchMode(true);
@@ -56,7 +56,7 @@ export default function App() {
     }
   }, [searchTerm, notes]);
 
-  // 4. Empty Search Message Logic
+
   useEffect(() => {
     if (isSearchMode && filteredNotes.length === 0) {
       setShowEmptyMessage(true);
@@ -109,7 +109,7 @@ export default function App() {
     setSearchTerm(searchText);
   }
 
-  // Prevent rendering on server to avoid hydration mismatch
+
   if (!isMounted) return null;
 
   return (
