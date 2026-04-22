@@ -14,7 +14,7 @@ export default function App() {
   const [filteredNotes, setFilteredNotes] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [showEmptyMessage, setShowEmptyMessage] = useState(false);
-  const isMounted = useRef(false);
+
   
   const [editObject, setEditObject] = useState({
     id: 0,
@@ -22,21 +22,6 @@ export default function App() {
     content: ""
   });
 
-useEffect(() => {
-  const savedNotes = localStorage.getItem("notes");
-  if (savedNotes) {
-    setNotes(JSON.parse(savedNotes));
-  }
-  isMounted.current = true; 
-}, []);
-
-
-useEffect(() => {
-
-  if (isMounted.current) {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }
-}, [notes]);
 
 
   useEffect(() => {
@@ -109,8 +94,6 @@ useEffect(() => {
     setSearchTerm(searchText);
   }
 
-
-  if (!isMounted) return null;
 
   return (
     <div>
