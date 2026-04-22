@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import Header from "../components/Header";
 import Note from "../components/Note";
 import CreateArea from "../components/CreateArea";
@@ -9,125 +9,66 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 export default function App() {
   const [notes, setNotes] = useState([]);
-  const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredNotes, setFilteredNotes] = useState([]);
   const [editMode, setEditMode] = useState(false);
-  const [showEmptyMessage, setShowEmptyMessage] = useState(false);
+  const [editObject, setEditObject] = useState({ id: 0, title: "", content: "" });
 
-  
-  const [editObject, setEditObject] = useState({
-    id: 0,
-    title: "",
-    content: ""
-  });
-
-
-
-  useEffect(() => {
-    if (searchTerm.trim()) {
-      setIsSearchMode(true);
-      const results = notes.filter((note) => {
+  // 1. Calculate these directly during render (no state, no effects!)
+  const filteredNotes = searchTerm.trim() 
+    ? notes.filter((note) => {
         const search = searchTerm.toLowerCase();
-        return (
-          note.title.toLowerCase().includes(search) ||
-          note.content.toLowerCase().includes(search)
-        );
-      });
-      setFilteredNotes(results);
-    } else {
-      setIsSearchMode(false);
-      setFilteredNotes(notes);
-    }
-  }, [searchTerm, notes]);
+        return note.title.toLowerCase().includes(search) || 
+               note.content.toLowerCase().includes(search);
+      })
+    : notes;
 
+  const isSearchMode = searchTerm.trim().length > 0;
+  
+  // Logic: Show message if we are searching AND results are empty
+  const showEmptyMessage = isSearchMode && filteredNotes.length === 0;
 
-  useEffect(() => {
-    if (isSearchMode && filteredNotes.length === 0) {
-      setShowEmptyMessage(true);
-      const timer = setTimeout(() => setShowEmptyMessage(false), 1500);
-      return () => clearTimeout(timer);
-    } else {
-      setShowEmptyMessage(false);
-    }
-  }, [isSearchMode, filteredNotes.length]);
-
+  // Handlers (kept exactly the same)
   function addNote(newNote) {
-    setNotes((prevNotes) => [
-      ...prevNotes,
-      { ...newNote, noteID: Date.now() }
-    ]);
+    setNotes((prev) => [...prev, { ...newNote, noteID: Date.now() }]);
   }
 
   function addEditNote(editNote) {
-    setNotes((prevNotes) =>
-      prevNotes.map((noteItem) =>
-        noteItem.noteID !== editNote.id
-          ? noteItem
-          : { ...noteItem, title: editNote.title, content: editNote.content }
-      )
-    );
-    setEditMode(false);
-  }
-
-  function cancelEditNote() {
+    setNotes((prev) => prev.map((note) => note.noteID !== editNote.id ? note : { ...note, title: editNote.title, content: editNote.content }));
     setEditMode(false);
   }
 
   function deleteNote(id) {
-    setNotes((prevNotes) => prevNotes.filter((noteItem) => noteItem.noteID !== id));
+    setNotes((prev) => prev.filter((note) => note.noteID !== id));
   }
 
   function editNote(id) {
     const noteToEdit = notes.find((note) => note.noteID === id);
     if (noteToEdit) {
       setEditMode(true);
-      setEditObject({
-        id: noteToEdit.noteID,
-        title: noteToEdit.title,
-        content: noteToEdit.content
-      });
+      setEditObject({ id: noteToEdit.noteID, title: noteToEdit.title, content: noteToEdit.content });
     }
   }
 
-  function filterNotes(searchText) {
-    setSearchTerm(searchText);
-  }
-
-
   return (
     <div>
-      <Header onSearch={filterNotes} />
-      <CreateArea
+      <Header onSearch={setSearchTerm} />
+      <CreateArea 
         onAdd={addNote}
         onAddEditNote={addEditNote}
-        onCancelEdit={cancelEditNote}
-        {...(editMode && {
-          editId: editObject.id,
-          editTitle: editObject.title,
-          editContent: editObject.content,
-          editOn: editMode
-        })}
+        onCancelEdit={() => setEditMode(false)}
+        {...(editMode && { editId: editObject.id, editTitle: editObject.title, editContent: editObject.content, editOn: true })}
       />
       
       <div className="notes-container">
         {filteredNotes.map((noteItem) => {
-          if (editMode && noteItem.noteID === editObject.id) {
-            return null;
-          }
+          if (editMode && noteItem.noteID === editObject.id) return null;
           return (
-            <Note
-              key={noteItem.noteID}
-              id={noteItem.noteID}
-              title={noteItem.title}
-              content={noteItem.content}
-              onDelete={deleteNote}
-              onEdit={editNote}
-            />
+            <Note key={noteItem.noteID} id={noteItem.noteID} title={noteItem.title} content={noteItem.content} onDelete={deleteNote} onEdit={editNote} />
           );
         })}
       </div>
 
+      {/* 2. Simply check the variable */}
       {showEmptyMessage && (
         <div className="error-message">
           <ErrorOutlineIcon style={{ fontSize: "1.25rem", marginRight: "8px", verticalAlign: "middle" }} />
