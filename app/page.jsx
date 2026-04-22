@@ -23,9 +23,11 @@ export default function App() {
     : notes;
 
   const isSearchMode = searchTerm.trim().length > 0;
-  
+
 
   const showEmptyMessage = isSearchMode && filteredNotes.length === 0;
+
+
 
   function addNote(newNote) {
     setNotes((prev) => [...prev, { ...newNote, noteID: Date.now() }]);
