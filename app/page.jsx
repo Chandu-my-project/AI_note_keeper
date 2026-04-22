@@ -27,7 +27,9 @@ export default function App() {
 
   const showEmptyMessage = isSearchMode && filteredNotes.length === 0;
 
-
+  function handleEditChange(name, value) {
+    setEditObject(prev => ({ ...prev, [name]: value }));
+  }
 
   function addNote(newNote) {
     setNotes((prev) => [...prev, { ...newNote, noteID: Date.now() }]);
@@ -54,6 +56,7 @@ export default function App() {
     <div>
       <Header onSearch={setSearchTerm} />
       <CreateArea 
+        onEditChange={handleEditChange}
         onAdd={addNote}
         onAddEditNote={addEditNote}
         onCancelEdit={() => setEditMode(false)}
